@@ -1,5 +1,5 @@
 export type TAdvertisement = {
-  id: string,
+  id?: string,
   name: string,
   content: string,
   startDate: string,

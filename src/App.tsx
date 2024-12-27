@@ -12,7 +12,7 @@ const App = () => {
         <Route path={PUBLIC_ROUTES.HOME} exact component={HomePage} />
         <ProtectedRoute exact path={PRIVATE_ROUTES.ADVERTISEMENTS} component={AdvertisementListPage} />
         <ProtectedRoute exact path={PRIVATE_ROUTES.NEW_ADVERTISEMENT} component={AdvertisementFormPage} />
-        <ProtectedRoute exact path={PRIVATE_ROUTES.EDIT_ADVERTISEMENT} component={AdvertisementFormPage} />
+        <ProtectedRoute exact path={'/advertisements/edit/:id'} component={AdvertisementFormPage} />
         <Route exact path={PUBLIC_ROUTES.ERROR} component={ErrorPage} />
         <Redirect to={PUBLIC_ROUTES.HOME} />
       </Switch>

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Delete, Edit } from '@material-ui/icons';
 import { Box, Button, Container, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
 
@@ -9,12 +9,12 @@ import { getAdvertisements, saveAdvertisements } from '../utils/storage';
 import { PRIVATE_ROUTES } from '../routes/routes';
 
 
-const AdvertisementListPage: FC = () => {
+const AdvertisementListPage: FC = (): JSX.Element => {
   const [advertisements, setAdvertisements] = useState<TAdvertisement[]>([]);
 
-  const history = useHistory();
+  const handleDeleteItem = (id?: string): void => {
+    if (!id) return;
 
-  const handleDeleteItem = (id: string): void => {
     const updatedAdvertisements = advertisements.filter((advertisement) => advertisement.id !== id);
     setAdvertisements(updatedAdvertisements);
 
@@ -25,9 +25,6 @@ const AdvertisementListPage: FC = () => {
     setAdvertisements(initialAdvertisements);
     saveAdvertisements(initialAdvertisements);
   };
-
-  const handleNavigateToAddPage = () => history.push(PRIVATE_ROUTES.NEW_ADVERTISEMENT);
-  const handleNavigateToEditPage = (id: string) => history.push(PRIVATE_ROUTES.EDIT_ADVERTISEMENT(id));
 
   useEffect(() => {
     const storedAdvertisements = getAdvertisements();
@@ -42,10 +39,21 @@ const AdvertisementListPage: FC = () => {
           secondary={`From ${startDate} to ${endDate}\n${content}`}
         />
         <ListItemSecondaryAction>
-          {/* <Button onClick={() => handleNavigateToEditPage(id)}>
+          <IconButton
+            edge="end"
+            aria-label="edit"
+            component={Link}
+            to={id ? PRIVATE_ROUTES.EDIT_ADVERTISEMENT(id) : '#'}
+            disabled={!id}
+            >
             <Edit />
-          </Button> */}
-          <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteItem(id)}>
+          </IconButton>
+          <IconButton
+            edge="end"
+            aria-label="delete"
+            onClick={() => handleDeleteItem(id)}
+            disabled={!id}
+            >
             <Delete />
           </IconButton>
         </ListItemSecondaryAction>
@@ -61,7 +69,8 @@ const AdvertisementListPage: FC = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={handleNavigateToAddPage}
+          component={Link}
+          to={PRIVATE_ROUTES.NEW_ADVERTISEMENT}
           style={{ marginBottom: 20 }}
         >
           Create New Advertisement
