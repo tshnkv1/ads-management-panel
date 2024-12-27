@@ -51,10 +51,23 @@ const AdvertisementFormPage: FC = () => {
     return true;
   };
 
+  const validateName = (store: TAdvertisement[], name: string) => store.some(
+    (advertisement) =>
+      advertisement.name.toLowerCase() === name.toLowerCase() && advertisement.id !== id
+  );
+
   const onSubmit = (data: TAdvertisement): void => {
     if (!validateDates(data)) return;
 
     const storedAdvertisements = getAdvertisements();
+
+    const isDuplicateName = validateName(storedAdvertisements, data.name);
+
+    if(isDuplicateName) {
+      setValidateError('An advertisement with the same name already exists.');
+      return;
+    }
+
     if (id) {
       const updatedAdvertisements = storedAdvertisements.map((advertisement) => 
         (advertisement.id === id ? { ...advertisement, ...data } : advertisement)
