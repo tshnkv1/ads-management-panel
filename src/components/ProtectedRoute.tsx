@@ -1,11 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { AUTH } from '../constants';
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { FC, useState, useEffect} from 'react';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
 
-const ProtectedRoute: React.FC<any> = ({ component: Component, ...rest }) => {
-    const [isAuthorized, setIsAuthorized] = useState(false);
-    const [checkedAuth, setCheckedAuth] = useState(false);
+import { AUTH } from '../constants';
+import { PUBLIC_ROUTES } from '../routes/routes';
+
+interface IProtectedRouteProps extends Omit<RouteProps, 'component'> {
+  component: React.ComponentType<object>;
+}
+
+const ProtectedRoute: FC<IProtectedRouteProps> = ({ component: Component, ...rest }): JSX.Element | null => {
+    const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+    const [checkedAuth, setCheckedAuth] = useState<boolean>(false);
   
     useEffect(() => {
       if (!checkedAuth) {
@@ -24,7 +29,7 @@ const ProtectedRoute: React.FC<any> = ({ component: Component, ...rest }) => {
     return isAuthorized ? (
       <Route {...rest} render={(props) => <Component {...props} />} />
     ) : (
-      <Redirect to="/error" />
+      <Redirect to={PUBLIC_ROUTES.ERROR} />
     );
   };
   

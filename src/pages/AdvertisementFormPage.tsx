@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
+import { Box, Button, Container, TextField, Typography } from '@material-ui/core';
+
 import { initialFromValue } from '../constants';
 import { getAdvertisements, saveAdvertisements } from '../utils/storage';
 import { TAdvertisement } from '../types/types';
 import { PRIVATE_ROUTES } from '../routes/routes';
-import { Box, Button, Container, TextField, Typography } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
 
-const AdvertisementFormPage: React.FC = () => {
-  const [validateError, setValidateError] = useState('');
+const AdvertisementFormPage: FC = () => {
+  const [validateError, setValidateError] = useState<string>('');
 
   const { id }: {id: string} = useParams();
   const history = useHistory();
@@ -38,7 +38,6 @@ const AdvertisementFormPage: React.FC = () => {
 
   const validateDates = (data: TAdvertisement): boolean => {
     const today = new Date().toISOString().split('T')[0];
-    console.log(today);
 
     if (data.startDate < today) {
       setValidateError('Start date cannot be in the past.');
@@ -51,10 +50,8 @@ const AdvertisementFormPage: React.FC = () => {
     setValidateError('');
     return true;
   };
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 
-  const onSubmit = (data: any): void => {
-    console.log(data);
+  const onSubmit = (data: TAdvertisement): void => {
     if (!validateDates(data)) return;
 
     const storedAdvertisements = getAdvertisements();

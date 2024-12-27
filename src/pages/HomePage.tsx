@@ -1,16 +1,14 @@
 import { FC, useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Box, Button, CircularProgress, Container, Typography } from '@material-ui/core';
 import axios from 'axios';
 
 import { API_KEYS, API_URL } from '../constants';
 import { PRIVATE_ROUTES } from '../routes/routes';
 
-const HomePage: FC = () => {
+const HomePage: FC = (): JSX.Element => {
   const [quote, setQuote] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const history = useHistory();
 
   const fetchQuote = () => {
     axios
@@ -25,8 +23,6 @@ const HomePage: FC = () => {
         })
         .finally(() => setIsLoading(false));
   };
-
-  const handleNavigateToPage = () => history.push(PRIVATE_ROUTES.ADVERTISEMENTS);
 
   useEffect(() => {
     fetchQuote();
@@ -43,7 +39,8 @@ const HomePage: FC = () => {
             variant="contained"
             color="primary"
             style={{ marginTop: 20 }}
-            onClick={handleNavigateToPage}
+            component={Link}
+            to={PRIVATE_ROUTES.ADVERTISEMENTS}
             >
             Go to Advertisement Panel
           </Button>
